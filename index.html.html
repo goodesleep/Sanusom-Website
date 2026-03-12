@@ -58,3 +58,54 @@ document.querySelectorAll('.img-ph').forEach(function(el){
   });
 });
 </script></body></html>
+// Audience toggle
+document.querySelectorAll('[data-aud-btn]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var id=this.getAttribute('data-aud-btn');
+    document.querySelectorAll('[data-aud-btn]').forEach(function(b){
+      b.style.borderColor=b.getAttribute('data-aud-btn')===id?'#fff':'rgba(255,255,255,0.25)';
+    });
+    document.querySelectorAll('[data-aud-section]').forEach(function(s){
+      s.style.display=s.getAttribute('data-aud-section')===id?'block':'none';
+    });
+  });
+});
+// Tab switching
+document.querySelectorAll('[data-tab-btn]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var group=this.getAttribute('data-tab-group');
+    var tab=this.getAttribute('data-tab-btn');
+    document.querySelectorAll('[data-tab-group="'+group+'"][data-tab-btn]').forEach(function(b){
+      var on=b.getAttribute('data-tab-btn')===tab;
+      b.style.fontWeight=on?'800':'600';
+      b.style.color=on?'#fff':'#3B51C4';
+      b.style.background=on?'linear-gradient(135deg,#4A6CF7,#3B51C4)':'transparent';
+      b.style.boxShadow=on?'0 3px 14px rgba(74,108,247,0.35)':'none';
+    });
+    document.querySelectorAll('[data-tab-content][data-tab-group="'+group+'"]').forEach(function(c){
+      c.style.display=c.getAttribute('data-tab-content')===tab?'block':'none';
+    });
+  });
+});
+// Image upload
+document.querySelectorAll('.img-ph').forEach(function(el){
+  el.addEventListener('click',function(){
+    var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+    inp.onchange=function(){
+      var f=this.files[0];if(!f)return;
+      var r=new FileReader();
+      r.onload=function(e){
+        var img=document.createElement('img');
+        img.src=e.target.result;
+        img.style.cssText='width:100%;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.08);cursor:pointer';
+        img.className='img-ph';
+        el.parentNode.replaceChild(img,el);
+        img.addEventListener('click',arguments.callee);
+      };
+      r.readAsDataURL(f);
+    };
+    inp.click();
+  });
+});
+</script></body></html>
+
